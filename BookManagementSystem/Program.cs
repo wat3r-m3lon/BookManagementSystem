@@ -1,3 +1,10 @@
+using BookManagement.Services.Interfaces;
+using BookManagement.Services.Services;
+using BookManagementDomain.Interfaces;
+using BookManagementSystem.Data.Data;
+using BookManagementSystem.Data.Repository;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IBookServices, BookServices>();
+builder.Services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
+builder.Services.AddDbContext<BookManagementDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
